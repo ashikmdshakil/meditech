@@ -1,14 +1,19 @@
 package com.quintet.meditech.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Component
 @Entity
@@ -18,8 +23,9 @@ public class Roles {
 	private int roleId;
 	private String name;
 	private String type;
-	@ManyToMany(mappedBy = "roles")
-	private List<Users> users;
+	@ManyToMany(mappedBy = "roles",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	@JsonIgnoreProperties("roles")
+	private List<Users> users = new ArrayList<Users>();
 
 	public int getRoleId() {
 		return roleId;
@@ -52,5 +58,13 @@ public class Roles {
 	public void setUsers(List<Users> users) {
 		this.users = users;
 	}
+
+	
+
+	
+	
+
+	
+
 
 }

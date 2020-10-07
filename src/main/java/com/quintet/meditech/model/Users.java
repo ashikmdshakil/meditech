@@ -1,9 +1,13 @@
 package com.quintet.meditech.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +17,8 @@ import javax.persistence.OneToOne;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Component
 @Entity
 public class Users {
@@ -20,6 +26,7 @@ public class Users {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int userId;
 	private String name;
+	@Column(unique = true)
 	private String email;
 	private String password;
 	private String mobileNumber;
@@ -34,13 +41,17 @@ public class Users {
 	private LocalDateTime lastLoginDate;
 	private String lastLoginIp;
 	private LocalDateTime lastFailedLoginDate;
+	@Column(columnDefinition = "integer default 0")
 	private int failedLoginAttempts;
+	@Column(columnDefinition = "boolean default false")
 	private boolean aggreedToTermOfUse;
-	private boolean emailVerified;
+	@Column(columnDefinition = "boolean default false")
+	private boolean emailVerified ;
 	@ManyToMany(mappedBy = "users")
 	private List<Account> account;
-	@ManyToMany
-	private List<Roles> roles;
+	@ManyToMany(fetch =FetchType.EAGER, cascade = CascadeType.ALL)
+	@JsonIgnoreProperties("users")
+	private List<Roles> roles = new ArrayList<Roles>();
 	@OneToOne
 	private UserAvatar userAvatar;
 	@OneToMany(mappedBy = "user")

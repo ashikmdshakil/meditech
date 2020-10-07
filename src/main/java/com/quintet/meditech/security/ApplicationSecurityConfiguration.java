@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -17,16 +18,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @Configuration
 @EnableWebSecurity
-public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapter{
 	@Autowired
 	private UserDetailsService userDetailsService;
-
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		// TODO Auto-generated method stub
 		auth.userDetailsService(userDetailsService);
 	}
-	
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// TODO Auto-generated method stub
@@ -35,11 +35,15 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
 		.authorizeRequests()
 		.antMatchers("/save").hasAuthority("admin")
 		.antMatchers("/delete**").hasAuthority("admin")
-		.antMatchers("/setRoles").hasAuthority("admin")
+		.antMatchers("/setUsers").hasAnyAuthority("admin","user")
+		.antMatchers("/login").hasAnyAuthority("admin","user")
+		.antMatchers("/logoutUser").hasAnyAuthority("admin","user")
+		.antMatchers("/signup").permitAll()
 		.anyRequest().authenticated()
 		.and().httpBasic()
 		.and()
-		.logout().invalidateHttpSession(true)
+		.logout()
+		.invalidateHttpSession(true)
 		.clearAuthentication(true)
 		.logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 		.and().csrf().disable();
@@ -49,17 +53,17 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
 	public PasswordEncoder getPasswordEncoder() {
 		return NoOpPasswordEncoder.getInstance();
 	}
-	
-	  @Bean
+	 @Bean
 	    public WebMvcConfigurer corsConfigurer() {
 	        return new WebMvcConfigurerAdapter() {
 	            @Override
 	            public void addCorsMappings(CorsRegistry registry) {
 	                registry.addMapping("/**")
 	                .allowedMethods("GET","POST")
-	                .allowedOrigins("http://localhost:4200");
+	                .allowedOrigins("*");
 	            }
 	        };
 	    }
+	
 
 }

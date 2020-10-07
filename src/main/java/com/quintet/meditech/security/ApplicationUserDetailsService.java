@@ -6,19 +6,20 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import com.quintet.meditech.model.Users;
+import com.quintet.meditech.repository.UserJPARepository;
 
 @Service
-public class ApplicationUserDetailsService implements UserDetailsService{
+public class ApplicationUserDetailsService implements UserDetailsService {
+	@Autowired
+	private UserJPARepository userRepo;
 	@Autowired
 	private Users user;
-	//@Autowired
-	//private jpaRepository studentRepo;
-	
 	@Override
-	public UserDetails loadUserByUsername(String phoneNumber) {
+	public UserDetails loadUserByUsername(String number){
 		// TODO Auto-generated method stub
-		//student = studentRepo.findByMail(mail);
+		user = userRepo.findByMobileNumber(number);
 		return new ApplicationUserDetails(user);
 	}
+	
 
 }
