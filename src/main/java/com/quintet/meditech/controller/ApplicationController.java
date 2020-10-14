@@ -43,8 +43,14 @@ public class ApplicationController {
 	
 	@GetMapping("/getUsers")
 	@ResponseBody
-	public List<Users> getUser() {
+	public List<Users> getUsers() {
 		return userRepo.findAll();
+	}
+	
+	@GetMapping("/getUser")
+	@ResponseBody
+	public Users getUser(@RequestParam("number") String mobileNumber) {
+		return userService.getUser(mobileNumber);
 	}
 	
 	@PostMapping(value = "signup",consumes="application/json")
@@ -53,8 +59,8 @@ public class ApplicationController {
 		String status = null; 
 		try {
 			user.setCreateDate(LocalDateTime.now());
-			role.setRoleId(2);
-			user.getRoles().add(role);
+			role.setRoleId(1);
+			user.setRoles(role);
 			role.getUsers().add(user);
 			userRepo.save(user);
 			status = "success";
@@ -87,18 +93,20 @@ public class ApplicationController {
  		SecurityContextHolder.clearContext();
 		return request.getUserPrincipal();
 	}
-	@PostMapping("assignRole")
+	
+	@PostMapping(value = "assignRole", consumes = "application/json")
 	@ResponseBody
-	public String assignRole(){
-		return null;
+	public Users assignRole(@RequestBody Users users) {
+		
+		userRepo.updateUserRole(users.getRoles().getRoleId(), users.getMobileNumber());
+		return users;
 	}
+	 
 	
 	@GetMapping("systemRoles")
 	@ResponseBody
 	public List<Roles> getSystemRoles(){
 		return roleService.getSystemRoles();
 	}
-
-	
 }
 

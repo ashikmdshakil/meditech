@@ -22,6 +22,9 @@ public class UserService {
 	public List<Users> getAllUsers(){
 		return userRepo.findAll();
 	}
+	public void updateRole(Users user) {
+		
+	}
 	
 	
 	

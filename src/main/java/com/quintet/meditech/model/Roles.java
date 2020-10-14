@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import org.springframework.stereotype.Component;
 
@@ -23,7 +24,7 @@ public class Roles {
 	private int roleId;
 	private String name;
 	private String type;
-	@ManyToMany(mappedBy = "roles",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "roles")
 	@JsonIgnoreProperties("roles")
 	private List<Users> users = new ArrayList<Users>();
 

@@ -20,11 +20,7 @@ public class ApplicationUserDetails implements UserDetails {
 	
 public ApplicationUserDetails(Users user) {
 	super();
-	List<Roles> roles = new ArrayList<Roles>();
-	roles = user.getRoles();
-	for(Roles role : roles) {
-		authorities.add(new SimpleGrantedAuthority(role.getName()));
-	}
+	authorities.add(new SimpleGrantedAuthority(user.getRoles().getName()));
 	this.username = user.getMobileNumber();
 	this.password = user.getPassword();
 }

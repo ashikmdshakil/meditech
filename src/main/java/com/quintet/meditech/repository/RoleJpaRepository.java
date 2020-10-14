@@ -8,7 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.quintet.meditech.model.Roles;
 
-public interface RoleJpaRepository extends CrudRepository<Roles, Integer> {
-	@Query(value = "select r.role_id, r.name, r.type from roles r;", nativeQuery = true)
+public interface RoleJpaRepository extends JpaRepository<Roles, Integer> {
+	@Query(value = "select * from roles;", nativeQuery = true)
 	public List<Roles> findAll();
 }

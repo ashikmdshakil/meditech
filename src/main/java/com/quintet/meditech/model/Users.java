@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -49,9 +50,8 @@ public class Users {
 	private boolean emailVerified ;
 	@ManyToMany(mappedBy = "users")
 	private List<Account> account;
-	@ManyToMany(fetch =FetchType.EAGER, cascade = CascadeType.ALL)
-	@JsonIgnoreProperties("users")
-	private List<Roles> roles = new ArrayList<Roles>();
+	@ManyToOne(fetch =FetchType.EAGER)
+	private Roles roles;
 	@OneToOne
 	private UserAvatar userAvatar;
 	@OneToMany(mappedBy = "user")
@@ -217,11 +217,11 @@ public class Users {
 		this.account = account;
 	}
 
-	public List<Roles> getRoles() {
+	public Roles getRoles() {
 		return roles;
 	}
 
-	public void setRoles(List<Roles> roles) {
+	public void setRoles(Roles roles) {
 		this.roles = roles;
 	}
 
