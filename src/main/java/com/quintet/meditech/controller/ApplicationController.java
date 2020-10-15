@@ -97,16 +97,21 @@ public class ApplicationController {
 	@PostMapping(value = "assignRole", consumes = "application/json")
 	@ResponseBody
 	public Users assignRole(@RequestBody Users users) {
-		
 		userRepo.updateUserRole(users.getRoles().getRoleId(), users.getMobileNumber());
 		return users;
 	}
 	 
-	
 	@GetMapping("systemRoles")
 	@ResponseBody
 	public List<Roles> getSystemRoles(){
 		return roleService.getSystemRoles();
 	}
+	@PostMapping(value = "removeUser", consumes = "application/json")
+	@ResponseBody
+	public Users deleteUser(@RequestBody Users users){
+		System.out.println(users.getEmail());
+		return users;
+	}
+	
 }
 

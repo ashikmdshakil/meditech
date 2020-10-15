@@ -51,6 +51,7 @@ public class Users {
 	@ManyToMany(mappedBy = "users")
 	private List<Account> account;
 	@ManyToOne(fetch =FetchType.EAGER)
+	@JsonIgnoreProperties("users")
 	private Roles roles;
 	@OneToOne
 	private UserAvatar userAvatar;
