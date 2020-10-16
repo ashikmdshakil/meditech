@@ -110,6 +110,7 @@ public class ApplicationController {
 	@ResponseBody
 	public Users deleteUser(@RequestBody Users users){
 		System.out.println(users.getEmail());
+		userService.deleteUser(users);
 		return users;
 	}
 	

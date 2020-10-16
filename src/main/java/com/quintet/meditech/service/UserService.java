@@ -25,6 +25,9 @@ public class UserService {
 	public void updateRole(Users user) {
 		
 	}
+	public void deleteUser(Users user) {
+		userRepo.delete(user);
+	}
 	
 	
 	
