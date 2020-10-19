@@ -8,6 +8,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.quintet.meditech.model.AddressBook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -35,6 +36,8 @@ public class ApplicationController {
 	private Users user;
 	@Autowired
 	private Roles role;
+	@Autowired
+	private AddressBook addressBook;
 	
 	@GetMapping("/")
 	public String homePage() {
@@ -106,12 +109,27 @@ public class ApplicationController {
 	public List<Roles> getSystemRoles(){
 		return roleService.getSystemRoles();
 	}
+
 	@PostMapping(value = "removeUser", consumes = "application/json")
 	@ResponseBody
 	public Users deleteUser(@RequestBody Users users){
 		System.out.println(users.getEmail());
 		userService.deleteUser(users);
 		return users;
+	}
+	@PostMapping(value = "updateUser", consumes = "application/json")
+	@ResponseBody
+	public String updateUser(@RequestBody Users users){
+		String status = null;
+		try {
+			addressBook = users.getAddressBooks();
+			userService.updateUser(users);
+			status = "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+			status = "failed";
+		}
+		return status;
 	}
 	
 }

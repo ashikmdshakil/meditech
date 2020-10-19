@@ -55,7 +55,8 @@ public class Users {
 	private Roles roles;
 	@OneToOne
 	private UserAvatar userAvatar;
-	@OneToOne
+	@OneToOne(fetch = FetchType.EAGER)
+	@JsonIgnoreProperties("user")
 	private AddressBook addressBooks;
 
 	public int getUserId() {

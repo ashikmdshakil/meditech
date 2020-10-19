@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.stereotype.Component;
 
 @Component
