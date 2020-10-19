@@ -2,11 +2,7 @@ package com.quintet.meditech.model;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import org.springframework.stereotype.Component;
 
@@ -26,7 +22,7 @@ public class AddressBook {
 	private String city;
 	private String zip;
 	private String country;
-	@ManyToOne
+	@OneToOne(mappedBy = "addressBooks")
 	private Users user;
 	@ManyToOne
 	private Account account;

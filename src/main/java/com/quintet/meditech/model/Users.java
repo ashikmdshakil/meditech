@@ -55,8 +55,8 @@ public class Users {
 	private Roles roles;
 	@OneToOne
 	private UserAvatar userAvatar;
-	@OneToMany(mappedBy = "user")
-	private List<AddressBook> addressBooks;
+	@OneToOne
+	private AddressBook addressBooks;
 
 	public int getUserId() {
 		return userId;
@@ -234,12 +234,11 @@ public class Users {
 		this.userAvatar = userAvatar;
 	}
 
-	public List<AddressBook> getAddressBooks() {
+	public AddressBook getAddressBooks() {
 		return addressBooks;
 	}
 
-	public void setAddressBooks(List<AddressBook> addressBooks) {
+	public void setAddressBooks(AddressBook addressBooks) {
 		this.addressBooks = addressBooks;
 	}
-
 }
