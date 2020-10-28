@@ -37,7 +37,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
 		.antMatchers("/delete**").hasAuthority("admin")
 		.antMatchers("/setUsers").hasAnyAuthority("admin","user")
 		.antMatchers("/login").hasAnyAuthority("super_admin","patient")
-		.antMatchers("/logoutUser").hasAnyAuthority("admin","user")
+		.antMatchers("/logoutUser").hasAnyAuthority("super_admin","patient","doctor","admin")
 		.antMatchers("/assignRole").hasAnyAuthority("super_admin","patient","doctor","admin")
 		.antMatchers("/signup").permitAll()
 		//.anyRequest().authenticated()

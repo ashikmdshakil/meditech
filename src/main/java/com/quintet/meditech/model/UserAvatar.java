@@ -1,12 +1,10 @@
 package com.quintet.meditech.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 @Component
 @Entity
@@ -14,9 +12,14 @@ public class UserAvatar {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int avatarId;
+	@Lob
 	private byte[] image;
 	@OneToOne(mappedBy = "userAvatar")
+	@JsonIgnoreProperties("userAvatar")
 	private Users user;
+
+	public UserAvatar() {
+	}
 
 	public int getAvatarId() {
 		return avatarId;

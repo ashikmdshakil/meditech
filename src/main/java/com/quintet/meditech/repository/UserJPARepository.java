@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.quintet.meditech.model.Users;
 
 public interface UserJPARepository extends JpaRepository<Users, Integer> {
+	public Users findById(int id);
 	public Users findByMobileNumber(String number);
 	@Modifying
 	@Transactional
