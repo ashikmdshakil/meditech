@@ -6,28 +6,26 @@ import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.List;
+import java.util.UUID;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import com.quintet.meditech.model.AddressBook;
-import com.quintet.meditech.model.UserAvatar;
+import com.quintet.meditech.model.*;
+import com.quintet.meditech.repository.TokenJpaRepository;
 import com.quintet.meditech.repository.UserAvatarJpaRepository;
+import com.quintet.meditech.service.EmailService;
 import com.quintet.meditech.service.UserAvatarService;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import com.quintet.meditech.model.Roles;
-import com.quintet.meditech.model.Users;
 import com.quintet.meditech.repository.UserJPARepository;
 import com.quintet.meditech.service.RoleService;
 import com.quintet.meditech.service.UserService;
@@ -53,6 +51,12 @@ public class ApplicationController {
 	private UserAvatarService avatarService;
 	@Autowired
 	private UserAvatarJpaRepository avatarRepo;
+	@Autowired
+	private Token token;
+	@Autowired
+	private TokenJpaRepository tokenRepo;
+	@Autowired
+	private EmailService emailService;
 	
 	@GetMapping("/")
 	public String homePage() {
@@ -160,17 +164,55 @@ public class ApplicationController {
 		avatarService.updateAvatar(user);
 		return user;
 	}
-	//@GetMapping(value = "getImage")
-	//@ResponseBody
-	//public HttpEntity<byte[]> getImage(){
-		//byte[] image = avatarRepo.findByAvatarId(2).getImage();
-		//HttpHeaders header = new HttpHeaders();
-		//header.setContentType(MediaType.IMAGE_JPEG);
-		//header.setContentLength(image.length);
-		//System.out.println(image);
-		//return new HttpEntity<byte[]>(image, header);
-	//}
+	@PostMapping(value = "mailForResetPassword")
+	@ResponseBody
+	public String mailForResetPassword(@RequestParam("number") String number) throws MessagingException {
+		System.out.println(number);
+		user = userRepo.findByMobileNumber(number);
+		if(user != null){
+			Token tokens = tokenRepo.findByUserUserId(user.getUserId());
+			if(tokens != null){
+				tokenRepo.deleteById(tokens.getId());
+				System.out.println("previous token is deleted ..");
+				token.setTokenString(UUID.randomUUID().toString()+LocalDateTime.now().toString());
+				token.setExpiredTime(LocalDateTime.now().plusHours(24));
+				token.setUser(user);
+				tokenRepo.save(token);
+				emailService.emailSend(token);
+				System.out.println("check email ....");
+			}
+			else{
+				System.out.println("no token is there .");
+				token.setTokenString(UUID.randomUUID().toString()+LocalDateTime.now().toString());
+				token.setExpiredTime(LocalDateTime.now().plusHours(24));
+				token.setUser(user);
+				tokenRepo.save(token);
+				emailService.emailSend(token);
+				System.out.println("check email ....");
+			}
 
+
+		}
+		else{
+			System.out.println("user is not valid .");
+		}
+		return null;
+	}
+	@GetMapping(value = "setPassword/{tokenString}")
+	public String resetPassword(@PathVariable("tokenString") String tokenString){
+		String message = null;
+		token = tokenRepo.findByTokenString(tokenString);
+		if(token.getExpiredTime().isBefore(LocalDateTime.now())){
+			message = "time is expired";
+		}
+		else{
+			message = "time is not expired";
+		}
+		return "redirect:"+ "http://10.0.0.4:4200";
+	}
 	
+
+
+
 }
 

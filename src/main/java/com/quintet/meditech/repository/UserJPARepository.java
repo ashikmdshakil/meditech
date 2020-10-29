@@ -15,5 +15,6 @@ public interface UserJPARepository extends JpaRepository<Users, Integer> {
 	@Transactional
 	@Query(value = "update users set roles_role_id = :roleId where mobile_number = :mobileNumber ;", nativeQuery = true)
 	public void updateUserRole(@Param("roleId") Integer roleId, @Param("mobileNumber") String mobileNumber);
+	public boolean existsByMobileNumber(String number);
 	
 }
