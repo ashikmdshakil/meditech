@@ -1,6 +1,7 @@
 package com.quintet.meditech.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 @EnableWebSecurity
 public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapter{
+	@Qualifier("applicationUserDetailsService")
 	@Autowired
 	private UserDetailsService userDetailsService;
 	@Override
@@ -40,7 +42,8 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
 		.antMatchers("/logoutUser").hasAnyAuthority("super_admin","patient","doctor","admin")
 		.antMatchers("/assignRole").hasAnyAuthority("super_admin","patient","doctor","admin")
 		.antMatchers("/signup").permitAll()
-		//.anyRequest().authenticated()
+		.antMatchers("/mailForResetPassword").permitAll()
+				.antMatchers("/setPassword").permitAll()
 		.and().httpBasic()
 		.and()
 		.logout()

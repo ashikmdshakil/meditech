@@ -190,25 +190,36 @@ public class ApplicationController {
 				emailService.emailSend(token);
 				System.out.println("check email ....");
 			}
-
-
 		}
 		else{
 			System.out.println("user is not valid .");
 		}
 		return null;
 	}
-	@GetMapping(value = "setPassword/{tokenString}")
-	public String resetPassword(@PathVariable("tokenString") String tokenString){
+
+	@PostMapping(value = "setPassword")
+	@ResponseBody
+	public String resetPassword(@RequestParam("tokenString") String tokenString, @RequestParam("password") String password){
 		String message = null;
+		System.out.println(tokenString);
 		token = tokenRepo.findByTokenString(tokenString);
-		if(token.getExpiredTime().isBefore(LocalDateTime.now())){
-			message = "time is expired";
+		if(token == null){
+			System.out.println("no token is found ...");
 		}
 		else{
-			message = "time is not expired";
+		System.out.println("token id is "+token.getId());
+			if(token.getExpiredTime().isBefore(LocalDateTime.now())){
+				System.out.println("token is expired....");
+				tokenRepo.deleteById(token.getId());
+			}
+			else{
+				message = "time is not expired";
+				token.getUser().setPassword(password);
+				userRepo.save(token.getUser());
+				tokenRepo.deleteById(token.getId());
+			}
 		}
-		return "redirect:"+ "http://10.0.0.4:4200";
+		return message;
 	}
 	
 

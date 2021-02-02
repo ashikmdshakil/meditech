@@ -58,6 +58,16 @@ public class Users {
 	@OneToOne(fetch = FetchType.EAGER)
 	@JsonIgnoreProperties("user")
 	private AddressBook addressBooks;
+	@OneToMany(mappedBy = "user")
+	private List<Speciality> specialities;
+	@OneToMany(mappedBy = "user")
+	private List<Degree> degrees;
+	@OneToMany(mappedBy = "user")
+	private List<Appoinment> appoinments;
+	@OneToMany(mappedBy = "user")
+	private List<DoctorSlot> doctorSlots;
+	@ManyToMany
+	private List<Categories> categories;
 
 	public int getUserId() {
 		return userId;
@@ -243,4 +253,43 @@ public class Users {
 		this.addressBooks = addressBooks;
 	}
 
+	public List<Speciality> getSpecialities() {
+		return specialities;
+	}
+
+	public void setSpecialities(List<Speciality> specialities) {
+		this.specialities = specialities;
+	}
+
+	public List<Degree> getDegrees() {
+		return degrees;
+	}
+
+	public void setDegrees(List<Degree> degrees) {
+		this.degrees = degrees;
+	}
+
+	public List<Appoinment> getAppoinments() {
+		return appoinments;
+	}
+
+	public void setAppoinments(List<Appoinment> appoinments) {
+		this.appoinments = appoinments;
+	}
+
+	public List<DoctorSlot> getDoctorSlots() {
+		return doctorSlots;
+	}
+
+	public void setDoctorSlots(List<DoctorSlot> doctorSlots) {
+		this.doctorSlots = doctorSlots;
+	}
+
+	public List<Categories> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(List<Categories> categories) {
+		this.categories = categories;
+	}
 }
