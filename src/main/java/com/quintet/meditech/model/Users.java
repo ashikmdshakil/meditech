@@ -53,7 +53,7 @@ public class Users {
 	@ManyToOne(fetch =FetchType.EAGER)
 	@JsonIgnoreProperties("users")
 	private Roles roles;
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	private UserAvatar userAvatar;
 	@OneToOne(fetch = FetchType.EAGER)
 	@JsonIgnoreProperties("user")

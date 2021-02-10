@@ -31,16 +31,17 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		// TODO Auto-generated method stub
+		// TODO Auto-generate method stub
 		http
 		.cors().and()
 		.authorizeRequests()
 		.antMatchers("/save").hasAuthority("admin")
+				.antMatchers("/getUsers").hasAuthority("super_admin")
 		.antMatchers("/delete**").hasAuthority("admin")
 		.antMatchers("/setUsers").hasAnyAuthority("admin","user")
-		.antMatchers("/login").hasAnyAuthority("super_admin","patient")
+		.antMatchers("/login").permitAll()
 		.antMatchers("/logoutUser").hasAnyAuthority("super_admin","patient","doctor","admin")
-		.antMatchers("/assignRole").hasAnyAuthority("super_admin","patient","doctor","admin")
+		.antMatchers("/assignRole").hasAnyAuthority("super_admin","patient","doctor","admin").antMatchers("/updateUserAgain").hasAnyAuthority("super_admin","patient","doctor","admin")
 		.antMatchers("/signup").permitAll()
 		.antMatchers("/mailForResetPassword").permitAll()
 				.antMatchers("/setPassword").permitAll()

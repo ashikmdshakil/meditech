@@ -140,14 +140,27 @@ public class ApplicationController {
 	@ResponseBody
 	public String updateUser(@RequestBody Users users){
 		String status = null;
+		System.out.println("Update controller works...");
 		try {
-			//addressBook = users.getAddressBooks();
+			addressBook = users.getAddressBooks();
+			addressBook.setUser(users);
+			users.setAddressBooks(addressBook);
 			userService.updateUser(users);
+
 			status = "success";
 		} catch (Exception e) {
 			e.printStackTrace();
 			status = "failed";
+			System.out.println("This is not working ....");
 		}
+		return status;
+	}
+	@PostMapping(value = "updateUserAgain", consumes = "application/json")
+	@ResponseBody
+	public String updateUserAgain(@RequestBody Users users){
+		String status = null;
+		System.out.println(users.getName());
+		System.out.println(users.getAddressBooks().getCity());
 		return status;
 	}
 	@PostMapping(value = "updateAvatar")
@@ -160,6 +173,7 @@ public class ApplicationController {
 		System.out.println(file.getOriginalFilename());
 		System.out.println(file.getSize());
 		userAvatar.setImage(file.getBytes());
+		userAvatar.setUser(user);
 		user.setUserAvatar(userAvatar);
 		avatarService.updateAvatar(user);
 		return user;

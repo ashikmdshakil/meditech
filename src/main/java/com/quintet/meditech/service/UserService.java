@@ -4,7 +4,9 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
+import com.quintet.meditech.model.UserAvatar;
 import com.quintet.meditech.repository.AddressBookJpaRepository;
+import com.quintet.meditech.repository.UserAvatarJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,10 @@ public class UserService {
     private AddressBookJpaRepository adddressBookJpaRepository;
     @Autowired
     private Users user;
+    @Autowired
+    private UserAvatarJpaRepository avatarRepo;
+    @Autowired
+    private UserAvatar userAvatar;
 
     public Users getUser(String mobileNumber) {
         user =  userRepo.findByMobileNumber(mobileNumber);
@@ -45,8 +51,12 @@ public class UserService {
     }
 
     public void updateUser(Users user){
-    	adddressBookJpaRepository.save(user.getAddressBooks());
+    	//adddressBookJpaRepository.save(user.getAddressBooks());
+        userAvatar = avatarRepo.findByUserUserId(user.getUserId());
+        System.out.println("avatar id is "+user.getAddressBooks().getUser().getUserId());
+        user.setUserAvatar(userAvatar);
         userRepo.save(user);
+        adddressBookJpaRepository.save(user.getAddressBooks());
 	}
     public Users findUser(int id) {
         return userRepo.findById(id);
