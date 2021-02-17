@@ -52,9 +52,13 @@ public class UserService {
 
     public void updateUser(Users user){
     	adddressBookJpaRepository.save(user.getAddressBooks());
-        userAvatar = avatarRepo.findByUserUserId(user.getUserId());
-        System.out.println("avatar id is "+user.getAddressBooks().getUser().getUserId());
-        user.setUserAvatar(userAvatar);
+        try {
+            userAvatar = avatarRepo.findByUserUserId(user.getUserId());
+            System.out.println("avatar id is "+user.getAddressBooks().getUser().getUserId());
+            user.setUserAvatar(userAvatar);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         userRepo.save(user);
         //adddressBookJpaRepository.save(user.getAddressBooks());
         System.out.println("User address is "+user.getAddressBooks().getCity());
