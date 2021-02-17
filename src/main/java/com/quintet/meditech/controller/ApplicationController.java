@@ -146,7 +146,6 @@ public class ApplicationController {
 			addressBook.setUser(users);
 			users.setAddressBooks(addressBook);
 			userService.updateUser(users);
-
 			status = "success";
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -51,12 +51,13 @@ public class UserService {
     }
 
     public void updateUser(Users user){
-    	//adddressBookJpaRepository.save(user.getAddressBooks());
+    	adddressBookJpaRepository.save(user.getAddressBooks());
         userAvatar = avatarRepo.findByUserUserId(user.getUserId());
         System.out.println("avatar id is "+user.getAddressBooks().getUser().getUserId());
         user.setUserAvatar(userAvatar);
         userRepo.save(user);
-        adddressBookJpaRepository.save(user.getAddressBooks());
+        //adddressBookJpaRepository.save(user.getAddressBooks());
+        System.out.println("User address is "+user.getAddressBooks().getCity());
 	}
     public Users findUser(int id) {
         return userRepo.findById(id);
