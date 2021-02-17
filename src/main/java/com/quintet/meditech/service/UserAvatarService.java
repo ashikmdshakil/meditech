@@ -1,5 +1,6 @@
 package com.quintet.meditech.service;
 
+import com.quintet.meditech.model.UserAvatar;
 import com.quintet.meditech.model.Users;
 import com.quintet.meditech.repository.UserAvatarJpaRepository;
 import com.quintet.meditech.repository.UserJPARepository;
@@ -15,7 +16,8 @@ public class UserAvatarService {
     @Autowired
     private UserJPARepository userRepo;
     public void updateAvatar(Users user){
-        avatarRepo.save(user.getUserAvatar());
+        //avatarRepo.save(userAvatar);
+        System.out.println("user is is "+user.getUserId());
         userRepo.save(user);
     }
 }

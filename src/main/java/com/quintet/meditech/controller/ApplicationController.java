@@ -173,6 +173,7 @@ public class ApplicationController {
 		System.out.println(file.getSize());
 		userAvatar.setImage(file.getBytes());
 		userAvatar.setUser(user);
+		System.out.println("This picture is of "+user.getName());
 		user.setUserAvatar(userAvatar);
 		avatarService.updateAvatar(user);
 		return user;
