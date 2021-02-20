@@ -42,6 +42,7 @@ public class ApplicationSecurityConfiguration extends WebSecurityConfigurerAdapt
 		.antMatchers("/login").permitAll()
 		.antMatchers("/logoutUser").hasAnyAuthority("super_admin","patient","doctor","admin")
 		.antMatchers("/assignRole").hasAnyAuthority("super_admin","patient","doctor","admin").antMatchers("/updateUserAgain").hasAnyAuthority("super_admin","patient","doctor","admin")
+				.antMatchers("/getCategories").hasAnyAuthority("super_admin","patient","doctor","admin")
 		.antMatchers("/signup").permitAll()
 		.antMatchers("/mailForResetPassword").permitAll()
 				.antMatchers("/setPassword").permitAll()

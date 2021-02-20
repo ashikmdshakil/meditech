@@ -4,6 +4,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
+import com.quintet.meditech.model.Categories;
 import com.quintet.meditech.model.UserAvatar;
 import com.quintet.meditech.repository.AddressBookJpaRepository;
 import com.quintet.meditech.repository.UserAvatarJpaRepository;
@@ -28,9 +29,9 @@ public class UserService {
 
     public Users getUser(String mobileNumber) {
         user =  userRepo.findByMobileNumber(mobileNumber);
-        //byte[] base64Image = Base64.getEncoder().encode(user.getUserAvatar().getImage());
-        //user.getUserAvatar().setBase64Image(base64Image);
-        //System.out.println(user.getUserAvatar().getBase64Image().toString());
+        for(Categories category: user.getCategories()){
+            System.out.println("category name is "+category.getName());
+        }
         return user;
     }
 
@@ -60,7 +61,6 @@ public class UserService {
             e.printStackTrace();
         }
         userRepo.save(user);
-        //adddressBookJpaRepository.save(user.getAddressBooks());
         System.out.println("User address is "+user.getAddressBooks().getCity());
 	}
     public Users findUser(int id) {

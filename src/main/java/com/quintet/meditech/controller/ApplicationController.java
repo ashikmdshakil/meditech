@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.quintet.meditech.model.*;
+import com.quintet.meditech.repository.CategoriesJpaRepository;
 import com.quintet.meditech.repository.TokenJpaRepository;
 import com.quintet.meditech.repository.UserAvatarJpaRepository;
 import com.quintet.meditech.service.EmailService;
@@ -57,6 +58,8 @@ public class ApplicationController {
 	private TokenJpaRepository tokenRepo;
 	@Autowired
 	private EmailService emailService;
+	@Autowired
+	private CategoriesJpaRepository categoriesRepo;
 	
 	@GetMapping("/")
 	public String homePage() {
@@ -82,6 +85,26 @@ public class ApplicationController {
 		try {
 			user.setCreateDate(LocalDateTime.now());
 			role.setRoleId(1);
+			user.setRoles(role);
+			role.getUsers().add(user);
+			userRepo.save(user);
+			status = "success";
+			System.out.println("Operation is successfull !");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			status = "failed";
+			System.out.println("Operation is not successfull !");
+		}
+		return status;
+	}
+	@PostMapping(value = "registerDoctor",consumes="application/json")
+	@ResponseBody
+	public String reisterDoctor(@RequestBody Users user, HttpServletRequest request) {
+		String status = null;
+		try {
+			user.setCreateDate(LocalDateTime.now());
+			role.setRoleId(2);
 			user.setRoles(role);
 			role.getUsers().add(user);
 			userRepo.save(user);
@@ -146,20 +169,16 @@ public class ApplicationController {
 			addressBook.setUser(users);
 			users.setAddressBooks(addressBook);
 			userService.updateUser(users);
+			List<Categories> categories = users.getCategories();
+			for (Categories categories1: categories){
+				System.out.println(categories1.getName());
+			}
 			status = "success";
 		} catch (Exception e) {
 			e.printStackTrace();
 			status = "failed";
 			System.out.println("This is not working ....");
 		}
-		return status;
-	}
-	@PostMapping(value = "updateUserAgain", consumes = "application/json")
-	@ResponseBody
-	public String updateUserAgain(@RequestBody Users users){
-		String status = null;
-		System.out.println(users.getName());
-		System.out.println(users.getAddressBooks().getCity());
 		return status;
 	}
 	@PostMapping(value = "updateAvatar")
@@ -235,9 +254,22 @@ public class ApplicationController {
 		}
 		return message;
 	}
-	
+	@GetMapping("getCategories")
+	@ResponseBody
+	 public List<Categories> getCategories() {
+		List<Categories> categories = categoriesRepo.findAll();
+		return categories;
+	 }
+	@GetMapping("getUserCategories")
+	@ResponseBody
+	 public List<Categories> userCategories(@RequestParam("number") String number){
+		user = userRepo.findByMobileNumber(number);
+		//List<Categories> categories = userRepo.findById(user.getUserId());
+		//System.out.println("Categories are "+categories.toString());
+		return null;
+	 }
 
 
+	}
 
-}
 
