@@ -18,6 +18,7 @@ import com.quintet.meditech.repository.TokenJpaRepository;
 import com.quintet.meditech.repository.UserAvatarJpaRepository;
 import com.quintet.meditech.service.EmailService;
 import com.quintet.meditech.service.UserAvatarService;
+import org.apache.catalina.User;
 import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -60,6 +61,8 @@ public class ApplicationController {
 	private EmailService emailService;
 	@Autowired
 	private CategoriesJpaRepository categoriesRepo;
+	@Autowired
+	private Categories categories;
 	
 	@GetMapping("/")
 	public String homePage() {
@@ -264,6 +267,13 @@ public class ApplicationController {
 		//List<Categories> categories = userRepo.findById(user.getUserId());
 		//System.out.println("Categories are "+categories.toString());
 		return null;
+	 }
+	 @GetMapping("getDoctorList")
+	 @ResponseBody
+	 public List<Users> getDoctorList(@RequestParam("id") String id){
+		//categories = categoriesRepo.findById(Integer.parseInt(id));
+		 List<Users> usersList = userRepo.findByCategoriesId(Integer.parseInt(id));
+		return usersList;
 	 }
 
 

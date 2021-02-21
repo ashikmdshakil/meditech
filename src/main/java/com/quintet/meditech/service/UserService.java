@@ -32,9 +32,6 @@ public class UserService {
 
     public Users getUser(String mobileNumber) {
         user =  userRepo.findByMobileNumber(mobileNumber);
-        for(Categories category: user.getCategories()){
-            System.out.println("category name is "+category.getName());
-        }
         return user;
     }
 

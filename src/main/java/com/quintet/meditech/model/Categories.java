@@ -1,8 +1,10 @@
 package com.quintet.meditech.model;
 
+import org.hibernate.annotations.Fetch;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import java.util.List;
@@ -13,7 +15,7 @@ public class Categories {
     @Id
     private int id;
     private String name;
-    @ManyToMany
+    @ManyToMany()
     private List<Users> users;
 
     public int getId() {
