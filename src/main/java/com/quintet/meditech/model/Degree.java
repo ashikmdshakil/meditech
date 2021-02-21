@@ -1,5 +1,7 @@
 package com.quintet.meditech.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
@@ -11,7 +13,7 @@ public class Degree {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String degreeName;
-    @ManyToOne
+    @OneToOne
     private Users user;
 
     public int getId() {

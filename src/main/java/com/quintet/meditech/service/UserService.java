@@ -4,15 +4,10 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
-import com.quintet.meditech.model.Categories;
-import com.quintet.meditech.model.UserAvatar;
-import com.quintet.meditech.repository.AddressBookJpaRepository;
-import com.quintet.meditech.repository.UserAvatarJpaRepository;
+import com.quintet.meditech.model.*;
+import com.quintet.meditech.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.quintet.meditech.model.Users;
-import com.quintet.meditech.repository.UserJPARepository;
 
 @Service
 public class UserService {
@@ -26,6 +21,14 @@ public class UserService {
     private UserAvatarJpaRepository avatarRepo;
     @Autowired
     private UserAvatar userAvatar;
+    @Autowired
+    private DegreeJpaRepository degreeRepo;
+    @Autowired
+    private Degree degree;
+    @Autowired
+    private Speciality speciality;
+    @Autowired
+    private SpecialityJpaRepository specialityRepo;
 
     public Users getUser(String mobileNumber) {
         user =  userRepo.findByMobileNumber(mobileNumber);
@@ -60,6 +63,21 @@ public class UserService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        try {
+            degree = user.getDegree();
+            degree.setUser(user);
+            degreeRepo.save(degree);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            speciality = user.getSpeciality();
+            speciality.setUser(user);
+            specialityRepo.save(speciality);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         userRepo.save(user);
         System.out.println("User address is "+user.getAddressBooks().getCity());
 	}

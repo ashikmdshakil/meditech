@@ -58,10 +58,12 @@ public class Users {
 	@OneToOne(fetch = FetchType.EAGER)
 	@JsonIgnoreProperties("user")
 	private AddressBook addressBooks;
-	@OneToMany(mappedBy = "user")
-	private List<Speciality> specialities;
-	@OneToMany(mappedBy = "user")
-	private List<Degree> degrees;
+	@OneToOne
+	@JsonIgnoreProperties("user")
+	private Speciality speciality;
+	@OneToOne
+	@JsonIgnoreProperties("user")
+	private Degree degree;
 	@OneToMany(mappedBy = "user")
 	private List<Appoinment> appoinments;
 	@OneToMany(mappedBy = "user")
@@ -253,20 +255,20 @@ public class Users {
 		this.addressBooks = addressBooks;
 	}
 
-	public List<Speciality> getSpecialities() {
-		return specialities;
+	public Speciality getSpeciality() {
+		return speciality;
 	}
 
-	public void setSpecialities(List<Speciality> specialities) {
-		this.specialities = specialities;
+	public void setSpeciality(Speciality speciality) {
+		this.speciality = speciality;
 	}
 
-	public List<Degree> getDegrees() {
-		return degrees;
+	public Degree getDegree() {
+		return degree;
 	}
 
-	public void setDegrees(List<Degree> degrees) {
-		this.degrees = degrees;
+	public void setDegree(Degree degree) {
+		this.degree = degree;
 	}
 
 	public List<Appoinment> getAppoinments() {

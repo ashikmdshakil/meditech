@@ -169,10 +169,7 @@ public class ApplicationController {
 			addressBook.setUser(users);
 			users.setAddressBooks(addressBook);
 			userService.updateUser(users);
-			List<Categories> categories = users.getCategories();
-			for (Categories categories1: categories){
-				System.out.println(categories1.getName());
-			}
+			System.out.println("speciality is "+users.getSpeciality().getSpeciality());
 			status = "success";
 		} catch (Exception e) {
 			e.printStackTrace();

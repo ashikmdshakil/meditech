@@ -11,7 +11,7 @@ public class Speciality {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String speciality;
-    @ManyToOne
+    @OneToOne
     private Users user;
 
     public int getId() {
