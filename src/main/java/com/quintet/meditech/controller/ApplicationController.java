@@ -63,6 +63,8 @@ public class ApplicationController {
 	private Categories categories;
 	@Autowired
 	private ChamberJpaRepository chamberRepo;
+	@Autowired
+	private DoctorSlotJpaRepo doctorSlotRepo;
 	
 	@GetMapping("/")
 	public String homePage() {
@@ -291,6 +293,21 @@ public class ApplicationController {
 		 }
 		 return status;
 	 }
+	@PostMapping(value = "updateDoctorSlots", consumes = "application/json")
+	@ResponseBody
+	public String updateDoctorSlots(@RequestBody DoctorSlot doctorSlot){
+		String status= null;
+		try {
+			user = userRepo.findByMobileNumber(doctorSlot.getUser().getMobileNumber());
+			doctorSlot.setUser(user);
+			doctorSlotRepo.save(doctorSlot);
+			status = "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+			status = "failed";
+		}
+		return status;
+	}
 
 
 	}
