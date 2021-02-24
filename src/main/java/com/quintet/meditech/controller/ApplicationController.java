@@ -4,6 +4,7 @@ import java.io.Console;
 import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
@@ -13,9 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.quintet.meditech.model.*;
-import com.quintet.meditech.repository.CategoriesJpaRepository;
-import com.quintet.meditech.repository.TokenJpaRepository;
-import com.quintet.meditech.repository.UserAvatarJpaRepository;
+import com.quintet.meditech.repository.*;
 import com.quintet.meditech.service.EmailService;
 import com.quintet.meditech.service.UserAvatarService;
 import org.apache.catalina.User;
@@ -28,7 +27,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import com.quintet.meditech.repository.UserJPARepository;
 import com.quintet.meditech.service.RoleService;
 import com.quintet.meditech.service.UserService;
 import org.springframework.web.multipart.MultipartFile;
@@ -63,6 +61,8 @@ public class ApplicationController {
 	private CategoriesJpaRepository categoriesRepo;
 	@Autowired
 	private Categories categories;
+	@Autowired
+	private ChamberJpaRepository chamberRepo;
 	
 	@GetMapping("/")
 	public String homePage() {
@@ -172,7 +172,7 @@ public class ApplicationController {
 			addressBook.setUser(users);
 			users.setAddressBooks(addressBook);
 			userService.updateUser(users);
-			System.out.println("speciality is "+users.getSpeciality().getSpeciality());
+			//System.out.println("speciality is "+users.getSpeciality().getSpeciality());
 			status = "success";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -274,6 +274,22 @@ public class ApplicationController {
 		//categories = categoriesRepo.findById(Integer.parseInt(id));
 		 List<Users> usersList = userRepo.findByCategoriesId(Integer.parseInt(id));
 		return usersList;
+	 }
+	 @PostMapping(value = "updateChamber", consumes = "application/json")
+	 @ResponseBody
+	 public String updateChamber(@RequestBody Chamber chamber){
+		String status= null;
+		 try {
+			 user = userRepo.findByMobileNumber(chamber.getUser().getMobileNumber());
+			 chamber.setUser(user);
+			 chamberRepo.save(chamber);
+			 System.out.println("Chamber updating is working .....");
+			 status = "success";
+		 } catch (Exception e) {
+			 e.printStackTrace();
+			 status = "failed";
+		 }
+		 return status;
 	 }
 
 

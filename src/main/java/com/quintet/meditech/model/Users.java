@@ -70,6 +70,9 @@ public class Users {
 	private List<DoctorSlot> doctorSlots;
 	@ManyToMany
 	private List<Categories> categories;
+	@OneToMany(mappedBy = "user")
+	@JsonIgnoreProperties("user")
+	private List<Chamber> chambers;
 
 	public int getUserId() {
 		return userId;
@@ -293,5 +296,13 @@ public class Users {
 
 	public void setCategories(List<Categories> categories) {
 		this.categories = categories;
+	}
+
+	public List<Chamber> getChambers() {
+		return chambers;
+	}
+
+	public void setChambers(List<Chamber> chambers) {
+		this.chambers = chambers;
 	}
 }

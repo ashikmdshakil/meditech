@@ -21,6 +21,8 @@ public class DoctorSlot {
     private Users user;
     @OneToMany(mappedBy = "doctorSlot")
     private List<Appoinment> appoinments;
+    @ManyToOne
+    private Chamber chamber;
 
     public int getId() {
         return id;
@@ -84,5 +86,13 @@ public class DoctorSlot {
 
     public void setAppoinments(List<Appoinment> appoinments) {
         this.appoinments = appoinments;
+    }
+
+    public Chamber getChamber() {
+        return chamber;
+    }
+
+    public void setChamber(Chamber chamber) {
+        this.chamber = chamber;
     }
 }
