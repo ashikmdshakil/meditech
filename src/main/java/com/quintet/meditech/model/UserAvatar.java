@@ -15,7 +15,6 @@ public class UserAvatar {
 	@Lob
 	private byte[] image;
 	@OneToOne(mappedBy = "userAvatar")
-	@JsonIgnoreProperties("userAvatar")
 	private Users user;
 
 	public UserAvatar() {

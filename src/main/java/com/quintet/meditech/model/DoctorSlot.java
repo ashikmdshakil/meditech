@@ -1,5 +1,6 @@
 package com.quintet.meditech.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
@@ -17,8 +18,8 @@ public class DoctorSlot {
     private LocalDateTime endTime;
     private int fees;
     private int maximumNumberOfAppoinment;
-    @ManyToOne
-    private Users user;
+//    @ManyToOne
+//    private Users user;
     @OneToMany(mappedBy = "doctorSlot")
     private List<Appoinment> appoinments;
     @ManyToOne
@@ -72,13 +73,13 @@ public class DoctorSlot {
         this.maximumNumberOfAppoinment = maximumNumberOfAppoinment;
     }
 
-    public Users getUser() {
-        return user;
-    }
-
-    public void setUser(Users user) {
-        this.user = user;
-    }
+//    public Users getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(Users user) {
+//        this.user = user;
+//    }
 
     public List<Appoinment> getAppoinments() {
         return appoinments;

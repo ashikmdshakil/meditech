@@ -298,8 +298,8 @@ public class ApplicationController {
 	public String updateDoctorSlots(@RequestBody DoctorSlot doctorSlot){
 		String status= null;
 		try {
-			user = userRepo.findByMobileNumber(doctorSlot.getUser().getMobileNumber());
-			doctorSlot.setUser(user);
+			//user = userRepo.findByMobileNumber(doctorSlot.getUser().getMobileNumber());
+			//doctorSlot.setUser(user);
 			doctorSlotRepo.save(doctorSlot);
 			status = "success";
 		} catch (Exception e) {

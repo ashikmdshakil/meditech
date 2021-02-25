@@ -54,6 +54,7 @@ public class Users {
 	@JsonIgnoreProperties("users")
 	private Roles roles;
 	@OneToOne(cascade = CascadeType.ALL)
+	@JsonIgnoreProperties("user")
 	private UserAvatar userAvatar;
 	@OneToOne(fetch = FetchType.EAGER)
 	@JsonIgnoreProperties("user")
@@ -66,8 +67,9 @@ public class Users {
 	private Degree degree;
 	@OneToMany(mappedBy = "user")
 	private List<Appoinment> appoinments;
-	@OneToMany(mappedBy = "user")
-	private List<DoctorSlot> doctorSlots;
+//	@OneToMany(mappedBy = "user")
+//	@JsonIgnoreProperties("user")
+//	private List<DoctorSlot> doctorSlots;
 	@ManyToMany
 	private List<Categories> categories;
 	@OneToMany(mappedBy = "user")
@@ -282,13 +284,13 @@ public class Users {
 		this.appoinments = appoinments;
 	}
 
-	public List<DoctorSlot> getDoctorSlots() {
-		return doctorSlots;
-	}
-
-	public void setDoctorSlots(List<DoctorSlot> doctorSlots) {
-		this.doctorSlots = doctorSlots;
-	}
+//	public List<DoctorSlot> getDoctorSlots() {
+//		return doctorSlots;
+//	}
+//
+//	public void setDoctorSlots(List<DoctorSlot> doctorSlots) {
+//		this.doctorSlots = doctorSlots;
+//	}
 
 	public List<Categories> getCategories() {
 		return categories;
