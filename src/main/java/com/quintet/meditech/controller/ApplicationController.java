@@ -333,11 +333,17 @@ public class ApplicationController {
 	@ResponseBody
 	public String takeAppoinment(@RequestBody Appoinment appoinment){
 		String status= null;
-		System.out.println(appoinment.getUser().getMobileNumber());
-		System.out.println(appoinment.getDoctorSlot().getId());
-		user = userRepo.findByMobileNumber(appoinment.getUser().getMobileNumber());
-		appoinment.setUser(user);
-		appoinmentRepo.save(appoinment);
+		try {
+			System.out.println(appoinment.getUser().getMobileNumber());
+			System.out.println(appoinment.getDoctorSlot().getId());
+			user = userRepo.findByMobileNumber(appoinment.getUser().getMobileNumber());
+			appoinment.setUser(user);
+			appoinmentRepo.save(appoinment);
+			status = "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+			status = "failed";
+		}
 		return status;
 	}
 
@@ -345,6 +351,18 @@ public class ApplicationController {
 	@ResponseBody
 	public List<DoctorSlot> getSlots(@RequestParam("id") int id){
 		return doctorSlotRepo.findByChamberId(id);
+	}
+
+	@GetMapping("getPatientList")
+	@ResponseBody
+	public List<Appoinment> getSlot(@RequestParam("id") int id){
+		return appoinmentRepo.findByDoctorSlotId(id);
+	}
+
+	@GetMapping("myAppoinments")
+	@ResponseBody
+	public List<Appoinment> myAppoinments(@RequestParam("mobileNumber") String number){
+		return appoinmentRepo.findByUserMobileNumber(number);
 	}
 
 

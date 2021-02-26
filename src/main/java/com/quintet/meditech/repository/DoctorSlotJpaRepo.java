@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface DoctorSlotJpaRepo extends JpaRepository<DoctorSlot, Integer> {
     List<DoctorSlot> findByChamberId(int id);
+    DoctorSlot findById(int id);
 }
