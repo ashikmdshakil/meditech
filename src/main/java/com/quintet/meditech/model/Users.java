@@ -78,6 +78,10 @@ public class Users {
 	@OneToMany(mappedBy = "user")
 	@JsonIgnoreProperties("user")
 	private List<Chamber> chambers;
+	@OneToMany(mappedBy = "user")
+	@JsonIgnore
+	private List<Prescription> prescriptions;
+
 
 	public int getUserId() {
 		return userId;
@@ -309,5 +313,13 @@ public class Users {
 
 	public void setChambers(List<Chamber> chambers) {
 		this.chambers = chambers;
+	}
+
+	public List<Prescription> getPrescriptions() {
+		return prescriptions;
+	}
+
+	public void setPrescriptions(List<Prescription> prescriptions) {
+		this.prescriptions = prescriptions;
 	}
 }

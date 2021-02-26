@@ -67,6 +67,10 @@ public class ApplicationController {
 	private DoctorSlotJpaRepo doctorSlotRepo;
 	@Autowired
 	private AppoinmentJpaRepository appoinmentRepo;
+	@Autowired
+	private Prescription prescription;
+	@Autowired
+	private PrescriptionJpaRepo prescriptionRepo;
 	
 	@GetMapping("/")
 	public String homePage() {
@@ -363,6 +367,28 @@ public class ApplicationController {
 	@ResponseBody
 	public List<Appoinment> myAppoinments(@RequestParam("mobileNumber") String number){
 		return appoinmentRepo.findByUserMobileNumber(number);
+	}
+
+	@PostMapping(value = "savePrescription", consumes = "application/json")
+	@ResponseBody
+	public String savePrescription(@RequestBody Prescription prescription){
+		String status= null;
+		try {
+			user = userRepo.findById(prescription.getUser().getUserId());
+			prescription.setUser(user);
+			prescriptionRepo.save(prescription);
+			status = "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+			status = "failed";
+		}
+		return status;
+	}
+
+	@GetMapping("getPrescriptions")
+	@ResponseBody
+	public List<Prescription> getPrescription(@RequestParam("id") int id){
+		return prescriptionRepo.findByUserUserId(id);
 	}
 
 
