@@ -65,6 +65,8 @@ public class ApplicationController {
 	private ChamberJpaRepository chamberRepo;
 	@Autowired
 	private DoctorSlotJpaRepo doctorSlotRepo;
+	@Autowired
+	private AppoinmentJpaRepository appoinmentRepo;
 	
 	@GetMapping("/")
 	public String homePage() {
@@ -81,6 +83,13 @@ public class ApplicationController {
 	@ResponseBody
 	public Users getUser(@RequestParam("number") String mobileNumber) {
 		return userService.getUser(mobileNumber);
+	}
+
+	@GetMapping("/getUserById")
+	@ResponseBody
+	public Users getUserById(@RequestParam("id") int id) {
+
+		return userRepo.findById(id);
 	}
 	
 	@PostMapping(value = "signup",consumes="application/json")
@@ -298,8 +307,8 @@ public class ApplicationController {
 	public String updateDoctorSlots(@RequestBody DoctorSlot doctorSlot){
 		String status= null;
 		try {
-			//user = userRepo.findByMobileNumber(doctorSlot.getUser().getMobileNumber());
-			//doctorSlot.setUser(user);
+			user = userRepo.findByMobileNumber(doctorSlot.getUser().getMobileNumber());
+			doctorSlot.setUser(user);
 			doctorSlotRepo.save(doctorSlot);
 			status = "success";
 		} catch (Exception e) {
@@ -307,6 +316,35 @@ public class ApplicationController {
 			status = "failed";
 		}
 		return status;
+	}
+	@GetMapping("getChamber")
+	@ResponseBody
+	public Chamber getChamber(@RequestParam("id") int id){
+		return chamberRepo.findById(id);
+	}
+
+	@GetMapping("getChambers")
+	@ResponseBody
+	public List<Chamber> getChambers(){
+		return chamberRepo.findAll();
+	}
+
+	@PostMapping(value = "takeAppoinment", consumes = "application/json")
+	@ResponseBody
+	public String takeAppoinment(@RequestBody Appoinment appoinment){
+		String status= null;
+		System.out.println(appoinment.getUser().getMobileNumber());
+		System.out.println(appoinment.getDoctorSlot().getId());
+		user = userRepo.findByMobileNumber(appoinment.getUser().getMobileNumber());
+		appoinment.setUser(user);
+		appoinmentRepo.save(appoinment);
+		return status;
+	}
+
+	@GetMapping("getSlots")
+	@ResponseBody
+	public List<DoctorSlot> getSlots(@RequestParam("id") int id){
+		return doctorSlotRepo.findByChamberId(id);
 	}
 
 

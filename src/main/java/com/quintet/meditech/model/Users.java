@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -66,10 +68,11 @@ public class Users {
 	@JsonIgnoreProperties("user")
 	private Degree degree;
 	@OneToMany(mappedBy = "user")
+	@JsonIgnore
 	private List<Appoinment> appoinments;
-//	@OneToMany(mappedBy = "user")
-//	@JsonIgnoreProperties("user")
-//	private List<DoctorSlot> doctorSlots;
+	@OneToMany(mappedBy = "user")
+	@JsonIgnore
+	private List<DoctorSlot> doctorSlots;
 	@ManyToMany
 	private List<Categories> categories;
 	@OneToMany(mappedBy = "user")
@@ -284,13 +287,13 @@ public class Users {
 		this.appoinments = appoinments;
 	}
 
-//	public List<DoctorSlot> getDoctorSlots() {
-//		return doctorSlots;
-//	}
-//
-//	public void setDoctorSlots(List<DoctorSlot> doctorSlots) {
-//		this.doctorSlots = doctorSlots;
-//	}
+	public List<DoctorSlot> getDoctorSlots() {
+		return doctorSlots;
+	}
+
+	public void setDoctorSlots(List<DoctorSlot> doctorSlots) {
+		this.doctorSlots = doctorSlots;
+	}
 
 	public List<Categories> getCategories() {
 		return categories;

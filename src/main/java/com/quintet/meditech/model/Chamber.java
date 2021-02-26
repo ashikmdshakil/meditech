@@ -1,6 +1,8 @@
 package com.quintet.meditech.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
@@ -17,7 +19,7 @@ public class Chamber {
     @ManyToOne
     private Users user;
     @OneToMany(mappedBy = "chamber")
-    @JsonIgnoreProperties("chamber")
+    @JsonIgnore
     private List<DoctorSlot> doctorSlots;
 
     public int getId() {
