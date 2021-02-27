@@ -468,6 +468,11 @@ public class ApplicationController {
 		}
 		return status;
 	}
+	@GetMapping("getPercentages")
+	@ResponseBody
+	public List<Percentage> getPercentage(){
+		return percentageRepo.findAll();
+	}
 
 
 	}
