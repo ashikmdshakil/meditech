@@ -32,6 +32,7 @@ public class Users {
 	@Column(unique = true)
 	private String email;
 	private String password;
+	@Column(unique = true)
 	private String mobileNumber;
 	private LocalDateTime createDate;
 	private LocalDateTime modifiedDate;
@@ -44,6 +45,7 @@ public class Users {
 	private LocalDateTime lastLoginDate;
 	private String lastLoginIp;
 	private LocalDateTime lastFailedLoginDate;
+	private String adminNumber;
 	@Column(columnDefinition = "integer default 0")
 	private int failedLoginAttempts;
 	@Column(columnDefinition = "boolean default false")
@@ -321,5 +323,13 @@ public class Users {
 
 	public void setPrescriptions(List<Prescription> prescriptions) {
 		this.prescriptions = prescriptions;
+	}
+
+	public String getAdminNumber() {
+		return adminNumber;
+	}
+
+	public void setAdminNumber(String adminNumber) {
+		this.adminNumber = adminNumber;
 	}
 }

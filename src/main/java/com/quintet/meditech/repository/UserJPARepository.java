@@ -20,5 +20,6 @@ public interface UserJPARepository extends JpaRepository<Users, Integer> {
 	public void updateUserRole(@Param("roleId") Integer roleId, @Param("mobileNumber") String mobileNumber);
 	public boolean existsByMobileNumber(String number);
 	public List<Users> findByCategoriesId(int id);
+	public List<Users> findByAdminNumberAndRolesRoleId(String number, int roleId);
 	
 }

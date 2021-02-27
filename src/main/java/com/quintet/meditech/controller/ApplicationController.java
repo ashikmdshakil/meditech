@@ -71,6 +71,8 @@ public class ApplicationController {
 	private Prescription prescription;
 	@Autowired
 	private PrescriptionJpaRepo prescriptionRepo;
+	@Autowired
+	private PercentageJpaRepository percentageRepo;
 	
 	@GetMapping("/")
 	public String homePage() {
@@ -108,6 +110,7 @@ public class ApplicationController {
 			userRepo.save(user);
 			status = "success";
 			System.out.println("Operation is successfull !");
+			System.out.println("admin's phone number is "+user.getAdminNumber());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -128,6 +131,51 @@ public class ApplicationController {
 			userRepo.save(user);
 			status = "success";
 			System.out.println("Operation is successfull !");
+			System.out.println("admin's phone number is "+user.getAdminNumber());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			status = "failed";
+			System.out.println("Operation is not successfull !");
+		}
+		return status;
+	}
+
+	@PostMapping(value = "registerPatient",consumes="application/json")
+	@ResponseBody
+	public String reisterPatient(@RequestBody Users user, HttpServletRequest request) {
+		String status = null;
+		try {
+			user.setCreateDate(LocalDateTime.now());
+			role.setRoleId(1);
+			user.setRoles(role);
+			role.getUsers().add(user);
+			userRepo.save(user);
+			status = "success";
+			System.out.println("Operation is successfull !");
+			System.out.println("admin's phone number is "+user.getAdminNumber());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			status = "failed";
+			System.out.println("Operation is not successfull !");
+		}
+		return status;
+	}
+
+	@PostMapping(value = "registerSuperman",consumes="application/json")
+	@ResponseBody
+	public String reisterSuperman(@RequestBody Users user, HttpServletRequest request) {
+		String status = null;
+		try {
+			user.setCreateDate(LocalDateTime.now());
+			role.setRoleId(4);
+			user.setRoles(role);
+			role.getUsers().add(user);
+			userRepo.save(user);
+			status = "success";
+			System.out.println("Operation is successfull !");
+			System.out.println("admin's phone number is "+user.getAdminNumber());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -389,6 +437,36 @@ public class ApplicationController {
 	@ResponseBody
 	public List<Prescription> getPrescription(@RequestParam("id") int id){
 		return prescriptionRepo.findByUserUserId(id);
+	}
+
+	@GetMapping("getAdminDoctors")
+	@ResponseBody
+	public List<Users> getAdminDoctors(@RequestParam("number") String number){
+		return userRepo.findByAdminNumberAndRolesRoleId(number, 2);
+	}
+	@GetMapping("getAdminPatients")
+	@ResponseBody
+	public List<Users> getAdminPatients(@RequestParam("number") String number){
+		return userRepo.findByAdminNumberAndRolesRoleId(number, 1);
+	}
+	@GetMapping("getAdminSupermen")
+	@ResponseBody
+	public List<Users> getAdminSupermen(@RequestParam("number") String number){
+		return userRepo.findByAdminNumberAndRolesRoleId(number, 4);
+	}
+
+	@PostMapping(value = "updatePercentage", consumes = "application/json")
+	@ResponseBody
+	public String updatePercentage(@RequestBody Percentage percentage){
+		String status= null;
+		try {
+			percentageRepo.save(percentage);
+			status = "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+			status = "failed";
+		}
+		return status;
 	}
 
 
