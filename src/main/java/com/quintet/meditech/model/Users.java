@@ -80,7 +80,7 @@ public class Users {
 	@OneToMany(mappedBy = "user")
 	@JsonIgnoreProperties("user")
 	private List<Chamber> chambers;
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "patient")
 	@JsonIgnore
 	private List<Prescription> prescriptions;
 

@@ -422,9 +422,7 @@ public class ApplicationController {
 	public String savePrescription(@RequestBody Prescription prescription){
 		String status= null;
 		try {
-			user = userRepo.findById(prescription.getUser().getUserId());
-			prescription.setUser(user);
-			prescriptionRepo.save(prescription);
+
 			status = "success";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -436,7 +434,7 @@ public class ApplicationController {
 	@GetMapping("getPrescriptions")
 	@ResponseBody
 	public List<Prescription> getPrescription(@RequestParam("id") int id){
-		return prescriptionRepo.findByUserUserId(id);
+		return prescriptionRepo.findByPatientUserId(id);
 	}
 
 	@GetMapping("getAdminDoctors")

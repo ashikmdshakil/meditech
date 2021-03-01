@@ -16,7 +16,9 @@ public class Prescription {
     private String doctorName;
     private String referredTo;
     @ManyToOne
-    private Users user;
+    private Users patient;
+    @OneToOne
+    private Users doctor;
 
     public int getId() {
         return id;
@@ -58,11 +60,19 @@ public class Prescription {
         this.referredTo = referredTo;
     }
 
-    public Users getUser() {
-        return user;
+    public Users getPatient() {
+        return patient;
     }
 
-    public void setUser(Users user) {
-        this.user = user;
+    public void setPatient(Users patient) {
+        this.patient = patient;
+    }
+
+    public Users getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Users doctor) {
+        this.doctor = doctor;
     }
 }
