@@ -16,12 +16,15 @@ public class Prescription {
     private String test;
     private String doctorName;
     private String referredTo;
+    private int appoinmentId;
     @ManyToOne
     private Users patient;
     @OneToOne
     private Users doctor;
     @ManyToMany
     private List<Medicine> medicines;
+    @ManyToMany
+    private List<Test> tests;
 
     public int getId() {
         return id;
@@ -85,5 +88,21 @@ public class Prescription {
 
     public void setMedicines(List<Medicine> medicines) {
         this.medicines = medicines;
+    }
+
+    public List<Test> getTests() {
+        return tests;
+    }
+
+    public void setTests(List<Test> tests) {
+        this.tests = tests;
+    }
+
+    public int getAppoinmentId() {
+        return appoinmentId;
+    }
+
+    public void setAppoinmentId(int appoinmentId) {
+        this.appoinmentId = appoinmentId;
     }
 }

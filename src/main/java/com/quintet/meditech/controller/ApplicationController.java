@@ -75,6 +75,8 @@ public class ApplicationController {
 	private PercentageJpaRepository percentageRepo;
 	@Autowired
 	private MedicineJpaRepository medicineRepo;
+	@Autowired
+	private TestJpaRepository testRepo;
 	
 	@GetMapping("/")
 	public String homePage() {
@@ -419,18 +421,26 @@ public class ApplicationController {
 		return appoinmentRepo.findByUserMobileNumber(number);
 	}
 
-	@PostMapping(value = "savePrescription", consumes = "application/json")
+	@PostMapping(value = "savePrescriptionMedicine", consumes = "application/json")
 	@ResponseBody
 	public String savePrescription(@RequestBody Prescription prescription){
 		String status= null;
 		try {
+			System.out.println("The appoinment id is "+prescription.getAppoinmentId());
 			for(Medicine medicine: prescription.getMedicines()) {
 				System.out.println(medicine.getId());
 				System.out.println(medicine.getMedicineName());
-				if(medicine.getId() == 0){
+				if (medicine.getId() == 0) {
 					medicineRepo.save(medicine);
 				}
 			}
+			/*for(Test test: prescription.getTests()){
+				System.out.println(test.getId());
+				System.out.println(test.getTestName());
+				if (test.getId() == 0) {
+					testRepo.save(test);
+				}
+			}*/
 			prescriptionRepo.save(prescription);
 			status = "success";
 		} catch (Exception e) {
@@ -439,6 +449,12 @@ public class ApplicationController {
 		}
 		return status;
 	}
+	@GetMapping("getFullPrescription")
+	@ResponseBody
+	public Prescription getUserPrescription(@RequestParam("appoinmentId") int appoinmentId, @RequestParam("userId") int userId){
+		return prescriptionRepo.findFirstByAppoinmentIdAndPatientUserId(appoinmentId, userId);
+	}
+
 
 	@GetMapping("getPrescriptions")
 	@ResponseBody
@@ -493,6 +509,12 @@ public class ApplicationController {
 	@ResponseBody
 	public List<Users> getAppDoctors(){
 		return userRepo.findByRolesRoleId(2);
+	};
+
+	@GetMapping("getTestNames")
+	@ResponseBody
+	public List<Test> getTests(){
+		return testRepo.findAll();
 	};
 
 
