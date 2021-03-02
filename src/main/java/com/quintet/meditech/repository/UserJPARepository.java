@@ -21,5 +21,6 @@ public interface UserJPARepository extends JpaRepository<Users, Integer> {
 	public boolean existsByMobileNumber(String number);
 	public List<Users> findByCategoriesId(int id);
 	public List<Users> findByAdminNumberAndRolesRoleId(String number, int roleId);
+	public List<Users> findByRolesRoleId(int id);
 	
 }

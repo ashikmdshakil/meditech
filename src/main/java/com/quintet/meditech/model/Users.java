@@ -84,7 +84,6 @@ public class Users {
 	@JsonIgnore
 	private List<Prescription> prescriptions;
 
-
 	public int getUserId() {
 		return userId;
 	}
@@ -332,4 +331,5 @@ public class Users {
 	public void setAdminNumber(String adminNumber) {
 		this.adminNumber = adminNumber;
 	}
+
 }

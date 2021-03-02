@@ -73,6 +73,8 @@ public class ApplicationController {
 	private PrescriptionJpaRepo prescriptionRepo;
 	@Autowired
 	private PercentageJpaRepository percentageRepo;
+	@Autowired
+	private MedicineJpaRepository medicineRepo;
 	
 	@GetMapping("/")
 	public String homePage() {
@@ -471,6 +473,21 @@ public class ApplicationController {
 	public List<Percentage> getPercentage(){
 		return percentageRepo.findAll();
 	}
+
+	@GetMapping("medicineList")
+	@ResponseBody
+	public List<Medicine> getMedicineList(){
+		/*for(Medicine medicine: medicineRepo.findAll()){
+			System.out.println(medicine.getMedicineName());
+		}*/
+		return medicineRepo.findAll();
+	};
+	@GetMapping("getAppDoctors")
+	@ResponseBody
+	public List<Users> getAppDoctors(){
+		return userRepo.findByRolesRoleId(2);
+	};
+
 
 
 	}

@@ -4,6 +4,7 @@ package com.quintet.meditech.model;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Component
 @Entity
@@ -19,6 +20,8 @@ public class Prescription {
     private Users patient;
     @OneToOne
     private Users doctor;
+    @ManyToMany
+    private List<Medicine> medicines;
 
     public int getId() {
         return id;
@@ -74,5 +77,13 @@ public class Prescription {
 
     public void setDoctor(Users doctor) {
         this.doctor = doctor;
+    }
+
+    public List<Medicine> getMedicines() {
+        return medicines;
+    }
+
+    public void setMedicines(List<Medicine> medicines) {
+        this.medicines = medicines;
     }
 }
