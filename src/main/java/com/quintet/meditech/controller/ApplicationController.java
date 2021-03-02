@@ -424,7 +424,14 @@ public class ApplicationController {
 	public String savePrescription(@RequestBody Prescription prescription){
 		String status= null;
 		try {
-
+			for(Medicine medicine: prescription.getMedicines()) {
+				System.out.println(medicine.getId());
+				System.out.println(medicine.getMedicineName());
+				if(medicine.getId() == 0){
+					medicineRepo.save(medicine);
+				}
+			}
+			prescriptionRepo.save(prescription);
 			status = "success";
 		} catch (Exception e) {
 			e.printStackTrace();
