@@ -3,16 +3,14 @@ package com.quintet.meditech.model;
 import org.hibernate.annotations.Fetch;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Component
 @Entity
 public class Categories {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     @ManyToMany()

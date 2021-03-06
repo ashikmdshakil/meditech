@@ -29,6 +29,8 @@ public class UserService {
     private Speciality speciality;
     @Autowired
     private SpecialityJpaRepository specialityRepo;
+    @Autowired
+    private CategoriesJpaRepository categoryRepo;
 
     public Users getUser(String mobileNumber) {
         user =  userRepo.findByMobileNumber(mobileNumber);
@@ -74,7 +76,12 @@ public class UserService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        try {
+            List<Categories> categories = user.getCategories();
+            //categoryRepo.saveAll(categories);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         userRepo.save(user);
         System.out.println("User address is "+user.getAddressBooks().getCity());
 	}

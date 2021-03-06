@@ -77,6 +77,8 @@ public class ApplicationController {
 	private MedicineJpaRepository medicineRepo;
 	@Autowired
 	private TestJpaRepository testRepo;
+	@Autowired
+	private MedicineSceduleJpaRepository scheduleRepo;
 	
 	@GetMapping("/")
 	public String homePage() {
@@ -113,13 +115,12 @@ public class ApplicationController {
 			role.getUsers().add(user);
 			userRepo.save(user);
 			status = "success";
-			System.out.println("Operation is successfull !");
-			System.out.println("admin's phone number is "+user.getAdminNumber());
+			System.out.println("Sign Up is successfull!");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			status = "failed";
-			System.out.println("Operation is not successfull !");
+			System.out.println("Sign Up is not successfull !");
 		}
 		return status;
 	}
@@ -134,13 +135,12 @@ public class ApplicationController {
 			role.getUsers().add(user);
 			userRepo.save(user);
 			status = "success";
-			System.out.println("Operation is successfull !");
-			System.out.println("admin's phone number is "+user.getAdminNumber());
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			status = "failed";
-			System.out.println("Operation is not successfull !");
+
 		}
 		return status;
 	}
@@ -156,13 +156,12 @@ public class ApplicationController {
 			role.getUsers().add(user);
 			userRepo.save(user);
 			status = "success";
-			System.out.println("Operation is successfull !");
-			System.out.println("admin's phone number is "+user.getAdminNumber());
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			status = "failed";
-			System.out.println("Operation is not successfull !");
+
 		}
 		return status;
 	}
@@ -178,13 +177,12 @@ public class ApplicationController {
 			role.getUsers().add(user);
 			userRepo.save(user);
 			status = "success";
-			System.out.println("Operation is successfull !");
-			System.out.println("admin's phone number is "+user.getAdminNumber());
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			status = "failed";
-			System.out.println("Operation is not successfull !");
+
 		}
 		return status;
 	}
@@ -198,7 +196,7 @@ public class ApplicationController {
 		user.setLastLoginIp(user.getLoginIp());
 		user.setLoginIp(request.getRemoteAddr());
 		userService.updateUserLoginInfo(user);
-		System.out.println("server isrunning ......");
+		System.out.println("Login is Successfull");
 		return userPrincipal;
 	}
 	@PostMapping("logoutUser")
@@ -239,7 +237,9 @@ public class ApplicationController {
 			addressBook.setUser(users);
 			users.setAddressBooks(addressBook);
 			userService.updateUser(users);
-			//System.out.println("speciality is "+users.getSpeciality().getSpeciality());
+			for(Categories category: users.getCategories()){
+				System.out.println("Category name is "+category.getName());
+			}
 			status = "success";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -390,12 +390,22 @@ public class ApplicationController {
 	public String takeAppoinment(@RequestBody Appoinment appoinment){
 		String status= null;
 		try {
-			System.out.println(appoinment.getUser().getMobileNumber());
-			System.out.println(appoinment.getDoctorSlot().getId());
 			user = userRepo.findByMobileNumber(appoinment.getUser().getMobileNumber());
-			appoinment.setUser(user);
-			appoinmentRepo.save(appoinment);
-			status = "success";
+			if(appoinmentRepo.existsByUserUserId(user.getUserId())){
+				status = "taken";
+			}
+			else{
+				appoinment.setUser(user);
+				int presentAppoinmentNumber = appoinmentRepo.countAppoinmentsByDoctorSlotId(appoinment.getDoctorSlot().getId());
+				int maxumumAppoinmentNumber = appoinment.getDoctorSlot().getMaximumNumberOfAppoinment();
+				if(presentAppoinmentNumber < maxumumAppoinmentNumber){
+					appoinmentRepo.save(appoinment);
+					status = "success";
+				}
+				else{
+					status = "overloaded";
+				}
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			status = "failed";
@@ -434,13 +444,7 @@ public class ApplicationController {
 					medicineRepo.save(medicine);
 				}
 			}
-			/*for(Test test: prescription.getTests()){
-				System.out.println(test.getId());
-				System.out.println(test.getTestName());
-				if (test.getId() == 0) {
-					testRepo.save(test);
-				}
-			}*/
+
 			prescriptionRepo.save(prescription);
 			status = "success";
 		} catch (Exception e) {
@@ -451,8 +455,9 @@ public class ApplicationController {
 	}
 	@GetMapping("getFullPrescription")
 	@ResponseBody
-	public Prescription getUserPrescription(@RequestParam("appoinmentId") int appoinmentId, @RequestParam("userId") int userId){
-		return prescriptionRepo.findFirstByAppoinmentIdAndPatientUserId(appoinmentId, userId);
+	public Prescription getUserPrescription(@RequestParam("appoinmentId") int appoinmentId){
+		System.out.println("Hey !!! This is working ....");
+		return prescriptionRepo.findFirstByAppoinmentId(appoinmentId);
 	}
 
 
@@ -460,6 +465,38 @@ public class ApplicationController {
 	@ResponseBody
 	public List<Prescription> getPrescription(@RequestParam("id") int id){
 		return prescriptionRepo.findByPatientUserId(id);
+	}
+
+
+	@PostMapping(value = "savePrescription", consumes = "application/json")
+	@ResponseBody
+	public String savePrescriptionfull(@RequestBody Prescription prescription){
+		String status= null;
+		try {
+			for(MedicineScedule schedule: prescription.getScedules()){
+				System.out.println("This medicine schedule id is "+schedule.getId());
+				System.out.println(" "+schedule.getMedicine().getMedicineName()+" "+schedule.getMorning()+"+"+" "+schedule.getDay()+"+"+" "+schedule.getNight()+" "+ schedule.getDays());
+				schedule.setPrescription(prescription);
+				System.out.println("This medicine scedule's prescription id is "+schedule.getId());
+				scheduleRepo.save(schedule);
+			}
+			for(Test test: prescription.getTests()){
+				System.out.println(test.getId());
+				System.out.println(test.getTestName());
+				if (test.getId() == 0) {
+					testRepo.save(test);
+				}
+			}
+			System.out.println("prescription id is "+prescription.getId());
+			System.out.println("Referrence DSoctor's id is "+prescription.getReferredDoctor().getUserId());
+			System.out.println("Referrence Doctor's name is "+prescription.getReferredDoctor().getName());
+			prescriptionRepo.save(prescription);
+			status = "success";
+		} catch (Exception e) {
+			e.printStackTrace();
+			status = "failed";
+		}
+		return status;
 	}
 
 	@GetMapping("getAdminDoctors")

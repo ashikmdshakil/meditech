@@ -17,6 +17,7 @@ public class Prescription {
     private String doctorName;
     private String referredTo;
     private int appoinmentId;
+    private String advice;
     @ManyToOne
     private Users patient;
     @OneToOne
@@ -25,6 +26,10 @@ public class Prescription {
     private List<Medicine> medicines;
     @ManyToMany
     private List<Test> tests;
+    @OneToMany(mappedBy = "prescription")
+    private List<MedicineScedule> scedules;
+    @OneToOne
+    private Users referredDoctor;
 
     public int getId() {
         return id;
@@ -104,5 +109,29 @@ public class Prescription {
 
     public void setAppoinmentId(int appoinmentId) {
         this.appoinmentId = appoinmentId;
+    }
+
+    public List<MedicineScedule> getScedules() {
+        return scedules;
+    }
+
+    public void setScedules(List<MedicineScedule> scedules) {
+        this.scedules = scedules;
+    }
+
+    public Users getReferredDoctor() {
+        return referredDoctor;
+    }
+
+    public void setReferredDoctor(Users referredDoctor) {
+        this.referredDoctor = referredDoctor;
+    }
+
+    public String getAdvice() {
+        return advice;
+    }
+
+    public void setAdvice(String advice) {
+        this.advice = advice;
     }
 }

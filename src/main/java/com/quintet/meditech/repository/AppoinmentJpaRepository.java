@@ -8,4 +8,6 @@ import java.util.List;
 public interface AppoinmentJpaRepository extends JpaRepository<Appoinment,Integer> {
     public List<Appoinment> findByUserMobileNumber(String number);
     public List<Appoinment> findByDoctorSlotId(int id);
+    int countAppoinmentsByDoctorSlotId(int id);
+    boolean existsByUserUserId(int id);
 }
