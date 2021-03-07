@@ -6,6 +6,9 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 @Entity
 public class Appoinment {
@@ -13,11 +16,15 @@ public class Appoinment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private LocalDateTime time;
+    private int serialNumber;
     private String status;
     @ManyToOne
     private Users user;
     @ManyToOne
     private DoctorSlot doctorSlot;
+    @OneToMany(mappedBy = "appoinment")
+    @JsonIgnoreProperties("appoinment")
+    private List<PrescriptionReport> reports = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -33,6 +40,14 @@ public class Appoinment {
 
     public void setTime(LocalDateTime time) {
         this.time = time;
+    }
+
+    public int getSerialNumber() {
+        return serialNumber;
+    }
+
+    public void setSerialNumber(int serialNumber) {
+        this.serialNumber = serialNumber;
     }
 
     public String getStatus() {
@@ -57,5 +72,13 @@ public class Appoinment {
 
     public void setDoctorSlot(DoctorSlot doctorSlot) {
         this.doctorSlot = doctorSlot;
+    }
+
+    public List<PrescriptionReport> getReports() {
+        return reports;
+    }
+
+    public void setReports(List<PrescriptionReport> reports) {
+        this.reports = reports;
     }
 }

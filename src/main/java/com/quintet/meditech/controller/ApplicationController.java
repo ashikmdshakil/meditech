@@ -3,7 +3,9 @@ package com.quintet.meditech.controller;
 import java.io.Console;
 import java.io.IOException;
 import java.security.Principal;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -79,6 +81,12 @@ public class ApplicationController {
 	private TestJpaRepository testRepo;
 	@Autowired
 	private MedicineSceduleJpaRepository scheduleRepo;
+	@Autowired
+	private PrescriptionReport prescriptionReport;
+	@Autowired
+	private PrescriptionReportJpaRepository prescriptionReportRepo;
+	@Autowired
+	private Appoinment appoinment;
 	
 	@GetMapping("/")
 	public String homePage() {
@@ -398,6 +406,16 @@ public class ApplicationController {
 				appoinment.setUser(user);
 				int presentAppoinmentNumber = appoinmentRepo.countAppoinmentsByDoctorSlotId(appoinment.getDoctorSlot().getId());
 				int maxumumAppoinmentNumber = appoinment.getDoctorSlot().getMaximumNumberOfAppoinment();
+				System.out.println("Present appoinment number is "+presentAppoinmentNumber);
+				LocalDateTime from = appoinment.getDoctorSlot().getStartTime();
+				LocalDateTime to = appoinment.getDoctorSlot().getEndTime();
+				Duration duration = Duration.between(from, to);
+				long durationTime= duration.toMinutes();
+				long durationPerPerson = durationTime/appoinment.getDoctorSlot().getMaximumNumberOfAppoinment();
+				int serialNumber = presentAppoinmentNumber + 1;
+				LocalDateTime appoinmentTime = appoinment.getDoctorSlot().getStartTime().plusMinutes(durationPerPerson*serialNumber);
+				appoinment.setSerialNumber(serialNumber);
+				appoinment.setTime(appoinmentTime);
 				if(presentAppoinmentNumber < maxumumAppoinmentNumber){
 					appoinmentRepo.save(appoinment);
 					status = "success";
@@ -549,7 +567,26 @@ public class ApplicationController {
 		return testRepo.findAll();
 	};
 
-
+	@PostMapping(value = "uploadReports")
+	@ResponseBody
+	public String previousReport(@RequestParam("reports") MultipartFile files[], @RequestParam("appoinmentId") String appoinmentId) throws IOException {
+		String status = null;
+		try {
+			appoinment.setId(Integer.parseInt(appoinmentId));
+			for(MultipartFile file : files){
+				prescriptionReport.setImage(file.getBytes());
+				prescriptionReport.setAppoinment(appoinment);
+				appoinment.getReports().add(prescriptionReport);
+				prescriptionReportRepo.save(prescriptionReport);
+			}
+			appoinmentRepo.save(appoinment);
+			status = "success";
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			status = "failed";
+		}
+		return status;
+	}
 
 	}
 
