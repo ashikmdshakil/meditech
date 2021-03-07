@@ -456,7 +456,6 @@ public class ApplicationController {
 	@GetMapping("getFullPrescription")
 	@ResponseBody
 	public Prescription getUserPrescription(@RequestParam("appoinmentId") int appoinmentId){
-		System.out.println("Hey !!! This is working ....");
 		return prescriptionRepo.findFirstByAppoinmentId(appoinmentId);
 	}
 
@@ -477,19 +476,15 @@ public class ApplicationController {
 				System.out.println("This medicine schedule id is "+schedule.getId());
 				System.out.println(" "+schedule.getMedicine().getMedicineName()+" "+schedule.getMorning()+"+"+" "+schedule.getDay()+"+"+" "+schedule.getNight()+" "+ schedule.getDays());
 				schedule.setPrescription(prescription);
-				System.out.println("This medicine scedule's prescription id is "+schedule.getId());
+				System.out.println("This medicine scedule's prescription id is "+schedule.getPrescription().getId());
+				System.out.println("The mediccine id is "+schedule.getMedicine().getId());
 				scheduleRepo.save(schedule);
 			}
 			for(Test test: prescription.getTests()){
-				System.out.println(test.getId());
-				System.out.println(test.getTestName());
 				if (test.getId() == 0) {
 					testRepo.save(test);
 				}
 			}
-			System.out.println("prescription id is "+prescription.getId());
-			System.out.println("Referrence DSoctor's id is "+prescription.getReferredDoctor().getUserId());
-			System.out.println("Referrence Doctor's name is "+prescription.getReferredDoctor().getName());
 			prescriptionRepo.save(prescription);
 			status = "success";
 		} catch (Exception e) {
