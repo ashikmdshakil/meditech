@@ -1,6 +1,7 @@
 package com.quintet.meditech.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +24,8 @@ public class Appoinment {
     @ManyToOne
     private DoctorSlot doctorSlot;
     @OneToMany(mappedBy = "appoinment")
-    @JsonIgnoreProperties("appoinment")
+    //@JsonIgnoreProperties("appoinment")
+    @JsonIgnore
     private List<PrescriptionReport> reports = new ArrayList<>();
 
     public int getId() {

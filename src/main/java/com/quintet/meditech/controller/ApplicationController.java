@@ -587,6 +587,11 @@ public class ApplicationController {
 		}
 		return status;
 	}
+	@GetMapping("getPreviousReports")
+	@ResponseBody
+	public List<PrescriptionReport> getPreviousReports(@RequestParam("appoinmentId") int id){
+		return prescriptionReportRepo.findByAppoinmentId(id);
+	}
 
 	}
 
