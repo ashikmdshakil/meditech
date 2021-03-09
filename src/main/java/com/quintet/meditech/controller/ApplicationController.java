@@ -405,10 +405,10 @@ public class ApplicationController {
 		String status= null;
 		try {
 			user = userRepo.findByMobileNumber(appoinment.getUser().getMobileNumber());
-			if(appoinmentRepo.existsByDoctorSlotId(appoinment.getDoctorSlot().getId())){
-				status = "taken";
-			}
-			else{
+			//if(appoinmentRepo.existsByDoctorSlotId(appoinment.getDoctorSlot().getId())){
+				//status = "taken";
+			//}
+			//else{
 				appoinment.setUser(user);
 				int presentAppoinmentNumber = appoinmentRepo.countAppoinmentsByDoctorSlotId(appoinment.getDoctorSlot().getId());
 				int maxumumAppoinmentNumber = appoinment.getDoctorSlot().getMaximumNumberOfAppoinment();
@@ -429,7 +429,7 @@ public class ApplicationController {
 				else{
 					status = "overloaded";
 				}
-			}
+			//}
 		} catch (Exception e) {
 			e.printStackTrace();
 			status = "failed";
@@ -585,7 +585,7 @@ public class ApplicationController {
 				appoinment.getReports().add(prescriptionReport);
 				prescriptionReportRepo.save(prescriptionReport);
 			}
-			appoinmentRepo.save(appoinment);
+			//appoinmentRepo.save(appoinment);
 			status = "success";
 		} catch (NumberFormatException e) {
 			e.printStackTrace();

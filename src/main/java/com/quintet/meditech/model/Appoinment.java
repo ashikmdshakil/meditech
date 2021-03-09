@@ -24,8 +24,7 @@ public class Appoinment {
     @ManyToOne
     private DoctorSlot doctorSlot;
     @OneToMany(mappedBy = "appoinment")
-    //@JsonIgnoreProperties("appoinment")
-    @JsonIgnore
+    @JsonIgnoreProperties("appoinment")
     private List<PrescriptionReport> reports = new ArrayList<>();
 
     public int getId() {

@@ -1,5 +1,6 @@
 package com.quintet.meditech.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
