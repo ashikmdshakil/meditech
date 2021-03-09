@@ -387,6 +387,12 @@ public class ApplicationController {
 		return chamberRepo.findById(id);
 	}
 
+	@GetMapping("getChamberOfDoctor")
+	@ResponseBody
+	public List<Chamber> getChamberOfDoctor(@RequestParam("id") int id){
+		return chamberRepo.findByUserUserId(id);
+	}
+
 	@GetMapping("getChambers")
 	@ResponseBody
 	public List<Chamber> getChambers(){
@@ -593,6 +599,11 @@ public class ApplicationController {
 		return prescriptionReportRepo.findByAppoinmentId(id);
 	}
 
+	@GetMapping("searchDoctors")
+	@ResponseBody
+	public List<Users> searchDoctors(@RequestParam("keyWords") String keyWords) {
+		return userRepo.findByNameIsContaining(keyWords);
+	}
 	}
 
 
