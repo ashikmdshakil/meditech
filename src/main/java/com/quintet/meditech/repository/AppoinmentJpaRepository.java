@@ -9,6 +9,6 @@ public interface AppoinmentJpaRepository extends JpaRepository<Appoinment,Intege
     public List<Appoinment> findByUserMobileNumber(String number);
     public List<Appoinment> findByDoctorSlotId(int id);
     int countAppoinmentsByDoctorSlotId(int id);
-    boolean existsByUserUserId(int id);
+    boolean existsByDoctorSlotId(int id);
     Appoinment findById(int id);
 }

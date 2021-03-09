@@ -399,7 +399,7 @@ public class ApplicationController {
 		String status= null;
 		try {
 			user = userRepo.findByMobileNumber(appoinment.getUser().getMobileNumber());
-			if(appoinmentRepo.existsByUserUserId(user.getUserId())){
+			if(appoinmentRepo.existsByDoctorSlotId(appoinment.getDoctorSlot().getId())){
 				status = "taken";
 			}
 			else{
