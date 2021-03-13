@@ -26,6 +26,8 @@ public class Appoinment {
     @OneToMany(mappedBy = "appoinment")
     @JsonIgnoreProperties("appoinment")
     private List<PrescriptionReport> reports = new ArrayList<>();
+    @OneToOne
+    private Prescription prescription;
 
     public int getId() {
         return id;
@@ -81,5 +83,13 @@ public class Appoinment {
 
     public void setReports(List<PrescriptionReport> reports) {
         this.reports = reports;
+    }
+
+    public Prescription getPrescription() {
+        return prescription;
+    }
+
+    public void setPrescription(Prescription prescription) {
+        this.prescription = prescription;
     }
 }

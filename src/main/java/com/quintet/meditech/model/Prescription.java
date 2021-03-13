@@ -17,7 +17,7 @@ public class Prescription {
     private String test;
     private String doctorName;
     private String referredTo;
-    private int appoinmentId;
+    //private int appoinmentId;
     private String advice;
     @ManyToOne
     private Users patient;
@@ -27,11 +27,13 @@ public class Prescription {
     private List<Medicine> medicines;
     @ManyToMany
     private List<Test> tests;
-    @OneToMany(mappedBy = "prescription")
+    @OneToMany(mappedBy = "prescription",cascade = CascadeType.ALL)
     @JsonIgnoreProperties("prescription")
     private List<MedicineScedule> scedules;
     @OneToOne
     private Users referredDoctor;
+    @OneToOne
+    private Appoinment appoinment;
 
     public int getId() {
         return id;
@@ -105,13 +107,13 @@ public class Prescription {
         this.tests = tests;
     }
 
-    public int getAppoinmentId() {
+   /* public int getAppoinmentId() {
         return appoinmentId;
     }
 
     public void setAppoinmentId(int appoinmentId) {
         this.appoinmentId = appoinmentId;
-    }
+    }*/
 
     public List<MedicineScedule> getScedules() {
         return scedules;
@@ -135,5 +137,13 @@ public class Prescription {
 
     public void setAdvice(String advice) {
         this.advice = advice;
+    }
+
+    public Appoinment getAppoinment() {
+        return appoinment;
+    }
+
+    public void setAppoinment(Appoinment appoinment) {
+        this.appoinment = appoinment;
     }
 }

@@ -14,9 +14,9 @@ public class MedicineScedule {
     private float day;
     private float night;
     private int days;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     private Medicine medicine;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private Prescription prescription;
 
 

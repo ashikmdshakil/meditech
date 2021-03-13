@@ -460,7 +460,7 @@ public class ApplicationController {
 	public String savePrescription(@RequestBody Prescription prescription){
 		String status= null;
 		try {
-			System.out.println("The appoinment id is "+prescription.getAppoinmentId());
+			//System.out.println("The appoinment id is "+prescription.getAppoinmentId());
 			for(Medicine medicine: prescription.getMedicines()) {
 				System.out.println(medicine.getId());
 				System.out.println(medicine.getMedicineName());
@@ -468,8 +468,13 @@ public class ApplicationController {
 					medicineRepo.save(medicine);
 				}
 			}
-
 			prescriptionRepo.save(prescription);
+			try {
+				scheduleRepo.deleteAllByPrescriptionId(prescription.getId());
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("No prescription exists...");
+			}
 			status = "success";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -503,6 +508,11 @@ public class ApplicationController {
 				System.out.println("This medicine scedule's prescription id is "+schedule.getPrescription().getId());
 				System.out.println("The mediccine id is "+schedule.getMedicine().getId());
 				scheduleRepo.save(schedule);
+				try {
+					scheduleRepo.deleteAllNull();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 			for(Test test: prescription.getTests()){
 				if (test.getId() == 0) {
