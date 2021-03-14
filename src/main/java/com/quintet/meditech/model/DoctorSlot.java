@@ -28,6 +28,8 @@ public class DoctorSlot {
     private List<Appoinment> appoinments;
     @ManyToOne
     private Chamber chamber;
+    private String dayName;
+    private int weekToRepeat;
 
     public int getId() {
         return id;
@@ -99,5 +101,21 @@ public class DoctorSlot {
 
     public void setChamber(Chamber chamber) {
         this.chamber = chamber;
+    }
+
+    public String getDayName() {
+        return dayName;
+    }
+
+    public void setDayName(String dayName) {
+        this.dayName = dayName;
+    }
+
+    public int getWeekToRepeat() {
+        return weekToRepeat;
+    }
+
+    public void setWeekToRepeat(int weekToRepeat) {
+        this.weekToRepeat = weekToRepeat;
     }
 }

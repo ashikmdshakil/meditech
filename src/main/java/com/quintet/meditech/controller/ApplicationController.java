@@ -3,15 +3,20 @@ package com.quintet.meditech.controller;
 import java.io.Console;
 import java.io.IOException;
 import java.security.Principal;
+import java.time.DayOfWeek;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAdjuster;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
 import javax.mail.MessagingException;
+import javax.print.Doc;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -20,8 +25,8 @@ import com.quintet.meditech.repository.*;
 import com.quintet.meditech.service.EmailService;
 import com.quintet.meditech.service.UserAvatarService;
 import org.apache.catalina.User;
-import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -373,7 +378,61 @@ public class ApplicationController {
 		try {
 			user = userRepo.findByMobileNumber(doctorSlot.getUser().getMobileNumber());
 			doctorSlot.setUser(user);
-			doctorSlotRepo.save(doctorSlot);
+			if(doctorSlot.getDayName() == null){
+				doctorSlotRepo.save(doctorSlot);
+			}
+			else{
+				LocalDateTime nextStart = null;
+				LocalDateTime nextEnd = null;
+				if(doctorSlot.getDayName().equals(doctorSlot.getStartTime().getDayOfWeek().toString())){
+					nextStart = doctorSlot.getStartTime();
+					nextEnd = doctorSlot.getStartTime();
+				}
+				else{
+					doctorSlotRepo.save(doctorSlot);
+
+					if(doctorSlot.getDayName().equals("SATURDAY")){
+						nextStart = doctorSlot.getStartTime().with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
+						nextEnd = doctorSlot.getStartTime().with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
+					}
+					else if(doctorSlot.getDayName().equals("SUNDAY")){
+						nextStart = doctorSlot.getStartTime().with(TemporalAdjusters.next(DayOfWeek.SUNDAY));
+						nextEnd = doctorSlot.getStartTime().with(TemporalAdjusters.next(DayOfWeek.SUNDAY));
+					}
+					else if(doctorSlot.getDayName().equals("MONDAY")){
+						nextStart = doctorSlot.getStartTime().with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+						nextEnd = doctorSlot.getStartTime().with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+					}
+					else if(doctorSlot.getDayName().equals("TUESDAY")){
+						nextStart = doctorSlot.getStartTime().with(TemporalAdjusters.next(DayOfWeek.TUESDAY));
+						nextEnd = doctorSlot.getStartTime().with(TemporalAdjusters.next(DayOfWeek.TUESDAY));
+					}
+					else if(doctorSlot.getDayName().equals("WEDNESDAY")){
+						nextStart = doctorSlot.getStartTime().with(TemporalAdjusters.next(DayOfWeek.WEDNESDAY));
+						nextEnd = doctorSlot.getStartTime().with(TemporalAdjusters.next(DayOfWeek.WEDNESDAY));
+					}
+					else if(doctorSlot.getDayName().equals("THURSDAY")){
+						nextStart = doctorSlot.getStartTime().with(TemporalAdjusters.next(DayOfWeek.THURSDAY));
+						nextEnd = doctorSlot.getStartTime().with(TemporalAdjusters.next(DayOfWeek.THURSDAY));
+					}
+					else if(doctorSlot.getDayName().equals("FRIDAY")){
+						nextStart = doctorSlot.getStartTime().with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
+						nextEnd = doctorSlot.getStartTime().with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
+					}
+				}
+				for (int i = 0; i < doctorSlot.getWeekToRepeat(); i++) {
+					DoctorSlot docSlot = new DoctorSlot();
+					docSlot.setName(doctorSlot.getName());
+					docSlot.setMaximumNumberOfAppoinment(doctorSlot.getMaximumNumberOfAppoinment());
+					docSlot.setStartTime(nextStart);
+					docSlot.setEndTime(nextEnd);
+					docSlot.setFees(doctorSlot.getFees());
+					docSlot.setChamber(doctorSlot.getChamber());
+					doctorSlotRepo.save(docSlot);
+					nextStart = nextStart.plusDays(7);
+					nextEnd = nextEnd.plusDays(7);
+				}
+			}
 			status = "success";
 		} catch (Exception e) {
 			e.printStackTrace();
