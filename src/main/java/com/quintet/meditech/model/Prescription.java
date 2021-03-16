@@ -27,7 +27,7 @@ public class Prescription {
     private List<Medicine> medicines;
     @ManyToMany
     private List<Test> tests;
-    @OneToMany(mappedBy = "prescription",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "prescription")
     @JsonIgnoreProperties("prescription")
     private List<MedicineScedule> scedules;
     @OneToOne

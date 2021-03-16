@@ -23,7 +23,7 @@ public class DoctorSlot {
     private int maximumNumberOfAppoinment;
     @ManyToOne
     private Users user;
-    @OneToMany(mappedBy = "doctorSlot")
+    @OneToMany(mappedBy = "doctorSlot",cascade = CascadeType.ALL,orphanRemoval = false)
     @JsonIgnore
     private List<Appoinment> appoinments;
     @ManyToOne

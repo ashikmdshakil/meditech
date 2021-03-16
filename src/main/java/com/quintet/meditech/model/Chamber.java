@@ -18,7 +18,7 @@ public class Chamber {
     private String adress;
     @ManyToOne
     private Users user;
-    @OneToMany(mappedBy = "chamber", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "chamber", cascade = CascadeType.ALL, orphanRemoval = false)
     @JsonIgnore
     private List<DoctorSlot> doctorSlots;
 

@@ -3,17 +3,16 @@ package com.quintet.meditech.controller;
 import java.io.Console;
 import java.io.IOException;
 import java.security.Principal;
+import java.sql.Date;
 import java.time.DayOfWeek;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import javax.mail.MessagingException;
 import javax.print.Doc;
@@ -440,6 +439,20 @@ public class ApplicationController {
 		}
 		return status;
 	}
+	@PostMapping(value = "deleteSlot", consumes = "application/json")
+	@ResponseBody
+	public String deleteSlot(@RequestBody DoctorSlot slot){
+		System.out.println("Slot id is "+slot.getId());
+		doctorSlotRepo.deleteById(slot.getId());
+		return null;
+	}
+
+	@GetMapping("slotsByDate")
+	@ResponseBody
+	public List<DoctorSlot> getSlotsByDate(@RequestParam("date") String date, @RequestParam("chamberId") String chamberId){
+		return doctorSlotRepo.findByTime(date, Integer.parseInt(chamberId));
+	}
+
 	@GetMapping("getChamber")
 	@ResponseBody
 	public Chamber getChamber(@RequestParam("id") int id){
